@@ -1,20 +1,24 @@
-#%matplotlib inline
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import LinearRegression
-import matplotlib.pyplot as plt
-import scipy.stats as stats
+from sklearn.model_selection import train_test_split
+from sklearn import linear_model
+from sklearn import preprocessing
+from sklearn import neighbors
 from pandas import DataFrame as df
-
-
 
 file_handler = open("Flaveria.csv", "r")
 
-# parses the csv data into a pandas data frame
-data = pd.read_csv(file_handler, sep = ",")
-data_column = data.rename({'N level':'n_level', 'Plant Weight(g)': 'weight'}, axis='columns')
-data_replaced_flowernames = data_column.replace({'species':{'brownii': 1, 'pringlei': 2, 'trinervia': 3, 'ramosissima': 4,
-	'robusta': 5, 'bidentis': 6}})
-dataset = data_replaced_flowernames.replace({'n_level':{'L': 1, 'M': 5, 'H': 10}})
+dataset = pd.read_csv(file_handler, sep=',', header=0)
+
+dataset.replace(["L", "M", "H", "brownii", "pringlei", "trinervia", "ramosissima", "robusta", "bidentis"],
+                    [1, 2, 3, 1, 2, 3, 4, 5, 6], inplace=True)
+dataset = dataset.rename({'N level':'n_level', 'Plant Weight(g)': 'weight'}, axis='columns')
 
 file_handler.close()
+
+onehotdataset = pd.get_dummies(dataset, columns=['n_level', 'species'])
+
+X = onehotdataset[onehotdataset.columns.difference(['weight'])]
+y = onehotdataset.iloc[:, 0]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state=9)
