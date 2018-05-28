@@ -21,4 +21,13 @@ onehotdataset = pd.get_dummies(dataset, columns=['n_level', 'species'])
 X = onehotdataset[onehotdataset.columns.difference(['weight'])]
 y = onehotdataset.iloc[:, 0]
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state=9)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.12, random_state=9)
+
+scaler = preprocessing.MinMaxScaler()
+
+x1_scaled = scaler.fit_transform(X_train)
+y1 = y_train.values.reshape(-1, 1)
+y1_scaled = scaler.fit_transform(y1)
+x2_scaled = scaler.fit_transform(X_test)
+y2 = y_test.values.reshape(-1, 1)
+y2_scaled = scaler.fit_transform(y2)
