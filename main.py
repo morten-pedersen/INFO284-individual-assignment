@@ -5,29 +5,39 @@ from sklearn import linear_model
 from sklearn import preprocessing
 from sklearn import neighbors
 from pandas import DataFrame as df
+from sklearn.preprocessing import LabelEncoder
+
 
 file_handler = open("Flaveria.csv", "r")
 
 dataset = pd.read_csv(file_handler, sep=',', header=0)
-
-dataset.replace(["L", "M", "H", "brownii", "pringlei", "trinervia", "ramosissima", "robusta", "bidentis"],
-                    [1, 2, 3, 1, 2, 3, 4, 5, 6], inplace=True)
-dataset = dataset.rename({'N level':'n_level', 'Plant Weight(g)': 'weight'}, axis='columns')
-
 file_handler.close()
 
-onehotdataset = pd.get_dummies(dataset, columns=['n_level', 'species'])
+data = pd.DataFrame(dataset)
 
-X = onehotdataset[onehotdataset.columns.difference(['weight'])]
-y = onehotdataset.iloc[:, 0]
+#dataset.replace(["L", "M", "H", "brownii", "pringlei", "trinervia", "ramosissima", "robusta", "bidentis"],
+                   # [1, 2, 3, 1, 2, 3, 4, 5, 6], inplace=True)
+#dataset = dataset.rename({'N level':'n_level', 'Plant Weight(g)': 'weight'}, axis='columns')
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.12, random_state=9)
+encoded = data.apply(LabelEncoder().fit_transform)
+oh = preprocessing.OneHotEncoder()
+data_enc = oh.fit_transform(encoded)
 
-scaler = preprocessing.MinMaxScaler()
+print(data_enc)
 
-x1_scaled = scaler.fit_transform(X_train)
-y1 = y_train.values.reshape(-1, 1)
-y1_scaled = scaler.fit_transform(y1)
-x2_scaled = scaler.fit_transform(X_test)
-y2 = y_test.values.reshape(-1, 1)
-y2_scaled = scaler.fit_transform(y2)
+
+#onehotdataset = pd.get_dummies(dataset, columns=['n_level', 'species'])
+
+#X = data_enc[data_enc.columns.difference(['weight'])]
+#y = data_enc.iloc[:, 0]
+
+#X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20)
+
+#scaler = preprocessing.MinMaxScaler()
+
+#x1_scaled = scaler.fit_transform(X_train)
+#y1 = y_train.values.reshape(-1, 1)
+#y1_scaled = scaler.fit_transform(y1)
+#x2_scaled = scaler.fit_transform(X_test)
+#y2 = y_test.values.reshape(-1, 1)
+#y2_scaled = scaler.fit_transform(y2)
