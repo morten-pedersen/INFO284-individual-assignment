@@ -52,7 +52,7 @@ def open_test_file(test_file):
 open_training_file("Flaveria_train.csv")
 open_test_file("Flaveria_test.csv")
 
-scaler = preprocessing.StandardScaler()
+scaler = preprocessing.MinMaxScaler()
 
 x1_scaled = scaler.fit_transform(X_train)
 x2_scaled = scaler.fit_transform(X_test)
