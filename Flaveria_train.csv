@@ -1,7 +1,6 @@
 N level,species,Plant Weight(g)
 L,brownii,0.3008
 L,brownii,0.3288
-M,brownii,0.3304
 M,brownii,0.388
 M,brownii,0.406
 H,brownii,0.3955
@@ -10,7 +9,6 @@ L,pringlei,0.3881
 L,pringlei,0.5194
 M,pringlei,0.3504
 M,pringlei,0.4592
-H,pringlei,0.369
 H,pringlei,0.4804
 H,pringlei,0.2786
 L,trinervia,0.3684
@@ -23,10 +21,10 @@ H,trinervia,0.384
 L,ramosissima,0.4063
 L,ramosissima,0.3572
 M,ramosissima,0.32
+M,ramosissima,0.3329
 M,ramosissima,0.3371
 H,ramosissima,0.4331
 H,ramosissima,0.4266
-H,ramosissima,0.3661
 L,robusta,0.4
 L,robusta,0.425
 L,robusta,0.5031

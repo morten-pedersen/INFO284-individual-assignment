@@ -1,0 +1,18 @@
+LARS 0.6818:
+
+N level,species,Plant Weight(g)
+H,brownii,0.3797
+L,pringlei,0.4667
+L,trinervia,0.372
+H,robusta,0.4464
+M,bidentis,0.4972
+H,ramosissima,0.3661
+
+LARS: 0.8094
+N level,species,Plant Weight(g)
+L,pringlei,0.4667
+L,trinervia,0.372
+M,brownii,0.3304
+H,robusta,0.4464
+M,bidentis,0.4972
+H,ramosissima,0.3661

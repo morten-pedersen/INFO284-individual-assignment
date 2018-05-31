@@ -10,6 +10,10 @@ from sklearn import preprocessing
 # we can use 1, 2, 3 as representations for the N level if we assume that the average of high and low is medium,
 # just as the average of 1 and 3 = 2
 
+# the train and test files have been split manually, with 6 data points serving as test data, because sklearn's
+# train_test_split function could sometimes remove all the L/M/H samples of one single species which negatively impacted
+# the r2 score
+
 def open_training_file(training_file):
 	global X_train
 	global y_train
@@ -56,17 +60,17 @@ open_test_file("Flaveria_test.csv")
 
 scaler = preprocessing.MinMaxScaler()
 
-x1_scaled = scaler.fit_transform(X_train)
-x2_scaled = scaler.fit_transform(X_test)
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.fit_transform(X_test)
 
 LinearRegression = linear_model.LinearRegression()
 
-LinearRegression.fit(x1_scaled, y_train)
+LinearRegression.fit(X_train_scaled, y_train)
 
-print("R2 score using training data: {:.4f}".format(LinearRegression.score(x1_scaled, y_train)))
-print("R2 score using test data: {:.4f}".format(LinearRegression.score(x2_scaled, y_test)), "\n")
+print("R2 score on training data using Linear Regression/OLS: {:.4f}".format(LinearRegression.score(X_train_scaled, y_train)))
+print("R2 score on test data using Linear Regression/OLS: {:.4f}".format(LinearRegression.score(X_test_scaled, y_test)), "\n")
 
-predictions = LinearRegression.predict(x2_scaled)
+predictions = LinearRegression.predict(X_test_scaled)
 
 print("Predicted weights: {}".format(predictions))
 print("Actual weights: {}".format(y_test))
@@ -74,5 +78,5 @@ print("Actual weights: {}".format(y_test))
 plt.scatter(predictions, y_test)
 plt.xlabel("predictions")
 plt.ylabel("y2")
-plt.title("Score: {:.4f}".format(LinearRegression.score(x2_scaled, y_test)))
+plt.title("Score: {:.4f}".format(LinearRegression.score(X_test_scaled, y_test)))
 plt.show()
