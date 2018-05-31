@@ -1,42 +1,36 @@
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
 from sklearn import linear_model
 from sklearn import preprocessing
-from sklearn import neighbors
-from pandas import DataFrame as df
-from sklearn.preprocessing import LabelEncoder
-from sklearn.decomposition import PCA
+from sklearn.svm import SVR
 
 
-
+# function that opens the desired training file with the filename
+# as argument, in this case "Flaveria_train.csv".
+# replaces N level characters with integers:
+# we can use 1, 2, 3 as representations for the N level if we assume that the average of high and low is medium,
+# just as the average of 1 and 3 = 2
 
 def open_training_file(training_file):
-
 	global X_train
 	global y_train
 
 	file_handler = open(training_file, "r")
-
 	opened_train_data = pd.read_csv(file_handler, sep = ',', header = 0)
 	file_handler.close()
-
 	train_data = pd.DataFrame(opened_train_data)
-
-	train_data.replace(["L", "M", "H"],  #, "brownii", "pringlei", "trinervia", "ramosissima", "robusta", "bidentis"],
-	                   [1, 2, 3], inplace = True)  #, 1, 2, 3, 4, 5, 6], inplace=True)
+	train_data.replace(["L", "M", "H"], [1, 2, 3], inplace = True)
 	train_data = train_data.rename({'N level': 'n_level', 'Plant Weight(g)': 'weight'}, axis = 'columns')
 	train = pd.get_dummies(train_data, columns = ['species'])
 	X_train = train[train.columns.difference(['weight'])]
 	y_train = train.iloc[:, 1]
-	return X_train, y_train
-
+	y_train = y_train.values
 	print("Training data loaded from: \n {}".format(training_file))
+
+	return X_train, y_train
 
 
 def open_test_file(test_file):
-
 	global X_test
 	global y_test
 
@@ -47,47 +41,39 @@ def open_test_file(test_file):
 
 	test_data = pd.DataFrame(opened_test_data)
 
-	test_data.replace(["L", "M", "H"],  #, "brownii", "pringlei", "trinervia", "ramosissima", "robusta", "bidentis"],
-	                  [1, 2, 3], inplace = True)  #, 1, 2, 3, 4, 5, 6], inplace=True)
+	test_data.replace(["L", "M", "H"], [1, 2, 3], inplace = True)
 	test_data = test_data.rename({'N level': 'n_level', 'Plant Weight(g)': 'weight'}, axis = 'columns')
 	test = pd.get_dummies(test_data, columns = ['species'])
 	X_test = test[test.columns.difference(['weight'])]
 	y_test = test.iloc[:, 1]
+	y_test = y_test.values
+	print("Test data loaded from: \n {}".format(test_file), "\n")
+
 	return X_test, y_test
-	print("Test data loaded from: \n {}".format(test_file))
 
 
 open_training_file("Flaveria_train.csv")
 open_test_file("Flaveria_test.csv")
 
-scaler = preprocessing.StandardScaler()
+scaler = preprocessing.MinMaxScaler()
 
 x1_scaled = scaler.fit_transform(X_train)
-y1 = y_train.values.reshape(-1, 1)
-y1_scaled = scaler.fit_transform(y1)
 x2_scaled = scaler.fit_transform(X_test)
-y2 = y_test.values.reshape(-1, 1)
-y2_scaled = scaler.fit_transform(y2)
 
-Ridge = linear_model.Ridge()
+SVR = SVR()
 
-Ridge.fit(x1_scaled, y1_scaled)
+SVR.fit(x1_scaled, y_train)
 
-print(Ridge.score(x1_scaled, y1_scaled))
-score = Ridge.score(x2_scaled, y2_scaled)
-print(score)
+print("R2 score using training data: {:.4f}".format(SVR.score(x1_scaled, y_train)))
+print("R2 score using test data: {:.4f}".format(SVR.score(x2_scaled, y_test)), "\n")
 
-predictions = Ridge.predict(x2_scaled)
+predictions = SVR.predict(x2_scaled)
 
-#plt.scatter(y2_scaled, predictions)
-#plt.xlabel("True values")
-#plt.ylabel("Predictions")
-#plt.title("Score: {}".format(score))
-#plt.show()
+print("Predicted weights: {}".format(predictions))
+print("Actual weights: {}".format(y_test))
 
-#X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0., random_state=9)
-
-
-#print(X_train.shape, y_train.shape)
-#print(X_test.shape, y_test.shape)
-
+plt.scatter(predictions, y_test)
+plt.xlabel("predictions")
+plt.ylabel("y2")
+plt.title("Score: {:.4f}".format(SVR.score(x2_scaled, y_test)))
+plt.show()

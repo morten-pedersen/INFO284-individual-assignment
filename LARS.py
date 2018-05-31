@@ -3,20 +3,22 @@ import matplotlib.pyplot as plt
 from sklearn import linear_model
 from sklearn import preprocessing
 
-def open_training_file(training_file):
 
+# function that opens the desired training file with the filename
+# as argument, in this case "Flaveria_train.csv".
+# replaces N level characters with integers:
+# we can use 1, 2, 3 as representations for the N level if we assume that the average of high and low is medium,
+# just as the average of 1 and 3 = 2
+
+def open_training_file(training_file):
 	global X_train
 	global y_train
 
 	file_handler = open(training_file, "r")
-
 	opened_train_data = pd.read_csv(file_handler, sep = ',', header = 0)
 	file_handler.close()
-
 	train_data = pd.DataFrame(opened_train_data)
-
-	train_data.replace(["L", "M", "H"],  #, "brownii", "pringlei", "trinervia", "ramosissima", "robusta", "bidentis"],
-	                   [1, 2, 3], inplace = True)  #, 1, 2, 3, 4, 5, 6], inplace=True)
+	train_data.replace(["L", "M", "H"], [1, 2, 3], inplace = True)
 	train_data = train_data.rename({'N level': 'n_level', 'Plant Weight(g)': 'weight'}, axis = 'columns')
 	train = pd.get_dummies(train_data, columns = ['species'])
 	X_train = train[train.columns.difference(['weight'])]
@@ -26,8 +28,8 @@ def open_training_file(training_file):
 
 	return X_train, y_train
 
-def open_test_file(test_file):
 
+def open_test_file(test_file):
 	global X_test
 	global y_test
 
@@ -44,7 +46,7 @@ def open_test_file(test_file):
 	X_test = test[test.columns.difference(['weight'])]
 	y_test = test.iloc[:, 1]
 	y_test = y_test.values
-	print("Test data loaded from: \n {}".format(test_file),"\n")
+	print("Test data loaded from: \n {}".format(test_file), "\n")
 
 	return X_test, y_test
 
@@ -62,7 +64,7 @@ Lars = linear_model.Lars()
 Lars.fit(x1_scaled, y_train)
 
 print("R2 score using training data: {:.4f}".format(Lars.score(x1_scaled, y_train)))
-print("R2 score using test data: {:.4f}".format(Lars.score(x2_scaled, y_test)),"\n")
+print("R2 score using test data: {:.4f}".format(Lars.score(x2_scaled, y_test)), "\n")
 
 predictions = Lars.predict(x2_scaled)
 
@@ -74,5 +76,3 @@ plt.xlabel("predictions")
 plt.ylabel("y2")
 plt.title("Score: {:.4f}".format(Lars.score(x2_scaled, y_test)))
 plt.show()
-
-
