@@ -7,62 +7,87 @@ from sklearn import preprocessing
 from sklearn import neighbors
 from pandas import DataFrame as df
 from sklearn.preprocessing import LabelEncoder
-from IPython.display import display
 from sklearn.decomposition import PCA
 
 
-file_handler = open("Flaveria.csv", "r")
 
-dataset = pd.read_csv(file_handler, sep=',', header=0)
-file_handler.close()
 
-data = pd.DataFrame(dataset)
+def open_training_file(training_file):
 
-dataset.replace(["L", "M", "H"],    #, "brownii", "pringlei", "trinervia", "ramosissima", "robusta", "bidentis"],
-                    [1, 2, 3], inplace=True)  #, 1, 2, 3, 4, 5, 6], inplace=True)
-dataset = dataset.rename({'N level':'n_level', 'Plant Weight(g)': 'weight'}, axis='columns')
-#le = LabelEncoder()
-#le.fit(data['N level', 'species'])
-#transformed = le.transform(data['N level', 'species'])
-#encoded = data.apply(le.fit_transform)
-#enc = preprocessing.OneHotEncoder()
-#data_enc = enc.fit_transform(encoded['species'])
+	global X_train
+	global y_train
 
-#print(data_enc)
+	file_handler = open(training_file, "r")
 
-onehotdataset = pd.get_dummies(dataset, columns=['species'])
+	opened_train_data = pd.read_csv(file_handler, sep = ',', header = 0)
+	file_handler.close()
 
-#onehotdataset.head()
+	train_data = pd.DataFrame(opened_train_data)
 
-X = onehotdataset[onehotdataset.columns.difference(['weight'])]
-y = onehotdataset.iloc[:, 1]
+	train_data.replace(["L", "M", "H"],  #, "brownii", "pringlei", "trinervia", "ramosissima", "robusta", "bidentis"],
+	                   [1, 2, 3], inplace = True)  #, 1, 2, 3, 4, 5, 6], inplace=True)
+	train_data = train_data.rename({'N level': 'n_level', 'Plant Weight(g)': 'weight'}, axis = 'columns')
+	train = pd.get_dummies(train_data, columns = ['species'])
+	X_train = train[train.columns.difference(['weight'])]
+	y_train = train.iloc[:, 1]
+	return X_train, y_train
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state=9) # 0.25 gives highest ridge score
+	print("Training data loaded from: \n {}".format(training_file))
 
-print(X_train.shape, y_train.shape)
-print(X_test.shape, y_test.shape)
 
-#scaler = preprocessing.MinMaxScaler()
+def open_test_file(test_file):
 
-#x1_scaled = scaler.fit_transform(X_train)
-#y1 = y_train.values.reshape(-1, 1)
-#y1_scaled = scaler.fit_transform(y1)
-#x2_scaled = scaler.fit_transform(X_test)
-#y2 = y_test.values.reshape(-1, 1)
-#y2_scaled = scaler.fit_transform(y2)
+	global X_test
+	global y_test
 
-ridge = linear_model.Ridge()
+	file_handler = open(test_file, "r")
 
-ridge.fit(X_train, y_train)
+	opened_test_data = pd.read_csv(file_handler, sep = ',', header = 0)
+	file_handler.close()
 
-print(ridge.score(X_train, y_train))
-score = ridge.score(X_test, y_test)
+	test_data = pd.DataFrame(opened_test_data)
+
+	test_data.replace(["L", "M", "H"],  #, "brownii", "pringlei", "trinervia", "ramosissima", "robusta", "bidentis"],
+	                  [1, 2, 3], inplace = True)  #, 1, 2, 3, 4, 5, 6], inplace=True)
+	test_data = test_data.rename({'N level': 'n_level', 'Plant Weight(g)': 'weight'}, axis = 'columns')
+	test = pd.get_dummies(test_data, columns = ['species'])
+	X_test = test[test.columns.difference(['weight'])]
+	y_test = test.iloc[:, 1]
+	return X_test, y_test
+	print("Test data loaded from: \n {}".format(test_file))
+
+
+open_training_file("Flaveria_train.csv")
+open_test_file("Flaveria_test.csv")
+
+scaler = preprocessing.StandardScaler()
+
+x1_scaled = scaler.fit_transform(X_train)
+y1 = y_train.values.reshape(-1, 1)
+y1_scaled = scaler.fit_transform(y1)
+x2_scaled = scaler.fit_transform(X_test)
+y2 = y_test.values.reshape(-1, 1)
+y2_scaled = scaler.fit_transform(y2)
+
+Ridge = linear_model.Ridge()
+
+Ridge.fit(x1_scaled, y1_scaled)
+
+print(Ridge.score(x1_scaled, y1_scaled))
+score = Ridge.score(x2_scaled, y2_scaled)
 print(score)
 
-predictions = ridge.predict(X_test)
+predictions = Ridge.predict(x2_scaled)
 
-plt.scatter(y_test, predictions)
-plt.xlabel("True values")
-plt.ylabel("Predictions")
-plt.title("Score: {}".format(score))
-plt.show()
+#plt.scatter(y2_scaled, predictions)
+#plt.xlabel("True values")
+#plt.ylabel("Predictions")
+#plt.title("Score: {}".format(score))
+#plt.show()
+
+#X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0., random_state=9)
+
+
+#print(X_train.shape, y_train.shape)
+#print(X_test.shape, y_test.shape)
+

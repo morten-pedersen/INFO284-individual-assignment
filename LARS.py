@@ -60,21 +60,30 @@ def open_test_file(test_file):
 open_training_file("Flaveria_train.csv")
 open_test_file("Flaveria_test.csv")
 
+scaler = preprocessing.StandardScaler()
+
+x1_scaled = scaler.fit_transform(X_train)
+y1 = y_train.values.reshape(-1, 1)
+y1_scaled = scaler.fit_transform(y1)
+x2_scaled = scaler.fit_transform(X_test)
+y2 = y_test.values.reshape(-1, 1)
+y2_scaled = scaler.fit_transform(y2)
+
 Lars = linear_model.Lars()
 
-Lars.fit(X_train, y_train)
+Lars.fit(x1_scaled, y1_scaled)
 
-print(Lars.score(X_train, y_train))
-score = Lars.score(X_test, y_test)
+print(Lars.score(x1_scaled, y1_scaled))
+score = Lars.score(x2_scaled, y2_scaled)
 print(score)
 
-predictions = Lars.predict(X_test)
+predictions = Lars.predict(x2_scaled)
 
-plt.scatter(y_test, predictions)
-plt.xlabel("True values")
-plt.ylabel("Predictions")
-plt.title("Score: {}".format(score))
-plt.show()
+#plt.scatter(y2_scaled, predictions)
+#plt.xlabel("True values")
+#plt.ylabel("Predictions")
+#plt.title("Score: {}".format(score))
+#plt.show()
 
 #X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0., random_state=9)
 
@@ -82,11 +91,3 @@ plt.show()
 #print(X_train.shape, y_train.shape)
 #print(X_test.shape, y_test.shape)
 
-#scaler = preprocessing.MinMaxScaler()
-
-#x1_scaled = scaler.fit_transform(X_train)
-#y1 = y_train.values.reshape(-1, 1)
-#y1_scaled = scaler.fit_transform(y_train)
-#x2_scaled = scaler.fit_transform(X_test)
-#y2 = y_test.values.reshape(-1, 1)
-#y2_scaled = scaler.fit_transform(y_test)
