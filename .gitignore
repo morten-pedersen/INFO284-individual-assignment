@@ -7604,3 +7604,9 @@ venv/share/jupyter/kernels/python3/logo-64x64.png
 venv/share/jupyter/nbextensions/jupyter-js-widgets/extension.js
 venv/share/jupyter/nbextensions/jupyter-js-widgets/extension.js.map
 venv/share/man/man1/ipython.1.gz
+.idea/workspace.xml
+*.xml
+*.xml
+*.xml___jb_old___
+*.xml
+.idea/workspace.xml
