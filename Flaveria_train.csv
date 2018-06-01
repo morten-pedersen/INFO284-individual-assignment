@@ -2,11 +2,14 @@ N level,species,Plant Weight(g)
 L,brownii,0.3008
 L,brownii,0.3288
 M,brownii,0.388
+M,brownii,0.3304
 M,brownii,0.406
 H,brownii,0.3955
+H,brownii,0.3797
 H,brownii,0.2962
 L,pringlei,0.3881
 L,pringlei,0.5194
+L,pringlei,0.4667
 M,pringlei,0.3504
 M,pringlei,0.4592
 H,pringlei,0.4804
@@ -34,6 +37,7 @@ H,robusta,0.4137
 H,robusta,0.5098
 L,bidentis,0.5362
 L,bidentis,0.652
+M,bidentis,0.4972
 M,bidentis,0.5654
 M,bidentis,0.4328
 H,bidentis,0.4617

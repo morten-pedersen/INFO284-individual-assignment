@@ -1,7 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn import linear_model
 from sklearn import preprocessing
+from sklearn.neural_network import MLPRegressor
+
 
 # function that opens the desired training file with the filename
 # as argument, in this case "Flaveria_train.csv".
@@ -62,14 +63,15 @@ scaler = preprocessing.MinMaxScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.fit_transform(X_test)
 
-RANSACRegressor = linear_model.RANSACRegressor()
+MLPRegressor = MLPRegressor(alpha = 0.14, max_iter = 1000, random_state = 10, solver = 'adam',
+                            learning_rate_init = 0.001, learning_rate = 'constant', activation = 'relu')
 
-RANSACRegressor.fit(X_train_scaled, y_train)
+MLPRegressor.fit(X_train_scaled, y_train)
 
-print("R2 score on training data using RANSACRegressor: {:.4f}".format(RANSACRegressor.score(X_train_scaled, y_train)))
-print("R2 score on test data using RANSACRegressor: {:.4f}".format(RANSACRegressor.score(X_test_scaled, y_test)), "\n")
+print("R2 score on training data using MLPRegressor: {:.4f}".format(MLPRegressor.score(X_train_scaled, y_train)))
+print("R2 score on test data using MLPRegressor: {:.4f}".format(MLPRegressor.score(X_test_scaled, y_test)), "\n")
 
-predictions = RANSACRegressor.predict(X_test_scaled)
+predictions = MLPRegressor.predict(X_test_scaled)
 
 print("Predicted weights: {}".format(predictions))
 print("Actual weights: {}".format(y_test))
@@ -77,5 +79,5 @@ print("Actual weights: {}".format(y_test))
 plt.scatter(predictions, y_test)
 plt.xlabel("x")
 plt.ylabel("y")
-plt.title("RANSACRegressor score: {:.4f}".format(RANSACRegressor.score(X_test_scaled, y_test)))
+plt.title("MLPRegressor score: {:.4f}".format(MLPRegressor.score(X_test_scaled, y_test)))
 plt.show()
