@@ -1,8 +1,9 @@
+# assuming code is being run in jupyter, remove %matplotlib inline if in other IDE
+#%matplotlib inline
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn import preprocessing
 from sklearn.neural_network import MLPRegressor
-
 
 # function that opens the desired training file with the filename
 # as argument, in this case "Flaveria_train.csv".
@@ -14,6 +15,8 @@ from sklearn.neural_network import MLPRegressor
 # train_test_split function could sometimes remove all the L/M/H samples of one single species which negatively impacted
 # the r2 score
 
+# .csv-files need to be in root folder of project!
+
 def open_training_file(training_file):
 	global X_train
 	global y_train
@@ -22,9 +25,15 @@ def open_training_file(training_file):
 	opened_train_data = pd.read_csv(file_handler, sep = ',', header = 0)
 	file_handler.close()
 	train_data = pd.DataFrame(opened_train_data)
+
+	# replaces categorical values in "N level" with numerical data
 	train_data.replace(["L", "M", "H"], [1, 2, 3], inplace = True)
 	train_data = train_data.rename({'N level': 'n_level', 'Plant Weight(g)': 'weight'}, axis = 'columns')
+
+	# pd.get_dummies uses one hot encoding to transform strings to binary columns, one for each species
 	train = pd.get_dummies(train_data, columns = ['species'])
+
+	# selects "n_level" and "species" for X, and leaves index 1 ("weight") for y
 	X_train = train[train.columns.difference(['weight'])]
 	y_train = train.iloc[:, 1]
 	y_train = y_train.values
@@ -44,34 +53,42 @@ def open_test_file(test_file):
 
 	test_data = pd.DataFrame(opened_test_data)
 
+	# replaces categorical values in "N level" with numerical data
 	test_data.replace(["L", "M", "H"], [1, 2, 3], inplace = True)
 	test_data = test_data.rename({'N level': 'n_level', 'Plant Weight(g)': 'weight'}, axis = 'columns')
+
+	# selects "n_level" and "species" for X, and leaves index 1 ("weight") for y
 	test = pd.get_dummies(test_data, columns = ['species'])
+
+	# selects "n_level" and "species" for X, and leaves index 1 ("weight") for y
 	X_test = test[test.columns.difference(['weight'])]
 	y_test = test.iloc[:, 1]
 	y_test = y_test.values
+
 	print("Test data loaded from: \n {}".format(test_file), "\n")
 
 	return X_test, y_test
 
-
+# choose which CSV files to load training and test data from
 open_training_file("Flaveria_train.csv")
 open_test_file("Flaveria_test.csv")
 
+# scales X using MinMax
 scaler = preprocessing.MinMaxScaler()
 
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.fit_transform(X_test)
 
-MLPRegressor = MLPRegressor(alpha = 0.14, max_iter = 1000, random_state = 10, solver = 'adam',
+# loads multi-layer perceptron regressor, with fixed random state for reproducable results
+MLP = MLPRegressor(alpha = 0.14, max_iter = 1000, random_state = 10, solver = 'adam',
                             learning_rate_init = 0.001, learning_rate = 'constant', activation = 'relu')
 
-MLPRegressor.fit(X_train_scaled, y_train)
+MLP.fit(X_train_scaled, y_train)
 
-print("R2 score on training data using MLPRegressor: {:.4f}".format(MLPRegressor.score(X_train_scaled, y_train)))
-print("R2 score on test data using MLPRegressor: {:.4f}".format(MLPRegressor.score(X_test_scaled, y_test)), "\n")
+print("R2 score on training data using MLPRegressor: {:.4f}".format(MLP.score(X_train_scaled, y_train)))
+print("R2 score on test data using MLPRegressor: {:.4f}".format(MLP.score(X_test_scaled, y_test)), "\n")
 
-predictions = MLPRegressor.predict(X_test_scaled)
+predictions = MLP.predict(X_test_scaled)
 
 print("Predicted weights: {}".format(predictions))
 print("Actual weights: {}".format(y_test))
@@ -79,5 +96,5 @@ print("Actual weights: {}".format(y_test))
 plt.scatter(predictions, y_test)
 plt.xlabel("x")
 plt.ylabel("y")
-plt.title("MLPRegressor score: {:.4f}".format(MLPRegressor.score(X_test_scaled, y_test)))
+plt.title("MLPRegressor score: {:.4f}".format(MLP.score(X_test_scaled, y_test)))
 plt.show()
