@@ -9,6 +9,7 @@ M,bidentis,0.4972
 H,ramosissima,0.3661
 
 LARS: 0.8094
+
 N level,species,Plant Weight(g)
 M,brownii,0.3304
 L,pringlei,0.4667
@@ -16,3 +17,110 @@ L,trinervia,0.372
 H,ramosissima,0.3661
 H,robusta,0.4464
 M,bidentis,0.4972
+
+fake test data, 0.5760 with LARS:
+
+N level,species,Plant Weight(g)
+L,brownii,0.3514
+M,pringlei,0.4877
+H,trinervia,0.3589
+L,ramosissima,0.4266
+M,robusta,0.4972
+H,bidentis,0.5111
+
+fake test data based on average:
+
+
+
+
+
+0.84 score training data:
+
+N level,species,Plant Weight(g)
+L,brownii,0.3008
+L,brownii,0.3288
+M,brownii,0.388
+M,brownii,0.406
+H,brownii,0.3955
+H,brownii,0.2962
+L,pringlei,0.3881
+L,pringlei,0.5194
+M,pringlei,0.3504
+M,pringlei,0.4592
+H,pringlei,0.4804
+H,pringlei,0.2786
+L,trinervia,0.3684
+L,trinervia,0.3254
+M,trinervia,0.4627
+M,trinervia,0.4135
+M,trinervia,0.3943
+H,trinervia,0.3981
+H,trinervia,0.384
+L,ramosissima,0.4063
+L,ramosissima,0.3572
+M,ramosissima,0.32
+M,ramosissima,0.3329
+M,ramosissima,0.3371
+H,ramosissima,0.4331
+H,ramosissima,0.4266
+L,robusta,0.4
+L,robusta,0.425
+L,robusta,0.5031
+M,robusta,0.6128
+M,robusta,0.3372
+H,robusta,0.4137
+H,robusta,0.5098
+L,bidentis,0.5362
+L,bidentis,0.652
+M,bidentis,0.5654
+M,bidentis,0.4328
+H,bidentis,0.4617
+H,bidentis,0.3044
+
+
+MLPRegressor 0.5127 training:
+
+N level,species,Plant Weight(g)
+L,brownii,0.3008
+L,brownii,0.3288
+M,brownii,0.388
+M,brownii,0.3304
+M,brownii,0.406
+H,brownii,0.3955
+H,brownii,0.3797
+H,brownii,0.2962
+L,pringlei,0.3881
+L,pringlei,0.5194
+L,pringlei,0.4667
+M,pringlei,0.3504
+M,pringlei,0.4592
+H,pringlei,0.4804
+H,pringlei,0.2786
+L,trinervia,0.3684
+L,trinervia,0.3254
+M,trinervia,0.4627
+M,trinervia,0.4135
+M,trinervia,0.3943
+H,trinervia,0.3981
+H,trinervia,0.384
+L,ramosissima,0.4063
+L,ramosissima,0.3572
+M,ramosissima,0.32
+M,ramosissima,0.3329
+M,ramosissima,0.3371
+H,ramosissima,0.4331
+H,ramosissima,0.4266
+L,robusta,0.4
+L,robusta,0.425
+L,robusta,0.5031
+M,robusta,0.6128
+M,robusta,0.3372
+H,robusta,0.4137
+H,robusta,0.5098
+L,bidentis,0.5362
+L,bidentis,0.652
+M,bidentis,0.4972
+M,bidentis,0.5654
+M,bidentis,0.4328
+H,bidentis,0.4617
+H,bidentis,0.3044
