@@ -3,13 +3,15 @@ import matplotlib.pyplot as plt
 from sklearn import linear_model
 from sklearn import preprocessing
 from sklearn.svm import SVR
-
-
 # function that opens the desired training file with the filename
 # as argument, in this case "Flaveria_train.csv".
 # replaces N level characters with integers:
 # we can use 1, 2, 3 as representations for the N level if we assume that the average of high and low is medium,
 # just as the average of 1 and 3 = 2
+
+# the train and test files have been split manually, with 6 data points serving as test data, because sklearn's
+# train_test_split function could sometimes remove all the L/M/H samples of one single species which negatively impacted
+# the r2 score
 
 def open_training_file(training_file):
 	global X_train
@@ -57,23 +59,23 @@ open_test_file("Flaveria_test.csv")
 
 scaler = preprocessing.MinMaxScaler()
 
-x1_scaled = scaler.fit_transform(X_train)
-x2_scaled = scaler.fit_transform(X_test)
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.fit_transform(X_test)
 
 SVR = SVR()
 
-SVR.fit(x1_scaled, y_train)
+SVR.fit(X_train_scaled, y_train)
 
-print("R2 score using training data: {:.4f}".format(SVR.score(x1_scaled, y_train)))
-print("R2 score using test data: {:.4f}".format(SVR.score(x2_scaled, y_test)), "\n")
+print("R2 score on training data using SVR: {:.4f}".format(SVR.score(X_train_scaled, y_train)))
+print("R2 score on test data using SVR: {:.4f}".format(SVR.score(X_test_scaled, y_test)), "\n")
 
-predictions = SVR.predict(x2_scaled)
+predictions = SVR.predict(X_test_scaled)
 
 print("Predicted weights: {}".format(predictions))
 print("Actual weights: {}".format(y_test))
 
 plt.scatter(predictions, y_test)
-plt.xlabel("predictions")
-plt.ylabel("y2")
-plt.title("Score: {:.4f}".format(SVR.score(x2_scaled, y_test)))
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("SVR score: {:.4f}".format(SVR.score(X_test_scaled, y_test)))
 plt.show()
