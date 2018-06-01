@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 from sklearn import linear_model
 from sklearn import preprocessing
 
-
 # function that opens the desired training file with the filename
 # as argument, in this case "Flaveria_train.csv".
 # replaces N level characters with integers:
