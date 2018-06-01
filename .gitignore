@@ -7610,3 +7610,4 @@ venv/share/man/man1/ipython.1.gz
 *.xml___jb_old___
 *.xml
 .idea/workspace.xml
+.idea
