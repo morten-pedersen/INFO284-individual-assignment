@@ -62,7 +62,7 @@ scaler = preprocessing.MinMaxScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.fit_transform(X_test)
 
-Lars = linear_model.Lars()
+Lars = linear_model.Lars(normalize=False)
 
 Lars.fit(X_train_scaled, y_train)
 
@@ -75,7 +75,7 @@ print("Predicted weights: {}".format(predictions))
 print("Actual weights: {}".format(y_test))
 
 plt.scatter(predictions, y_test)
-plt.xlabel("Predicted weight")
-plt.ylabel("Actual weight")
+plt.xlabel("x")
+plt.ylabel("y")
 plt.title("Score: {:.4f}".format(Lars.score(X_test_scaled, y_test)))
 plt.show()

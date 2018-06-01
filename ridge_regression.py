@@ -63,7 +63,7 @@ scaler = preprocessing.MinMaxScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.fit_transform(X_test)
 
-Ridge = linear_model.Ridge()
+Ridge = linear_model.Ridge(alpha = 1, normalize = False)
 
 Ridge.fit(X_train_scaled, y_train)
 
@@ -76,7 +76,7 @@ print("Predicted weights: {}".format(predictions))
 print("Actual weights: {}".format(y_test))
 
 plt.scatter(predictions, y_test)
-plt.xlabel("predictions")
-plt.ylabel("y2")
+plt.xlabel("x")
+plt.ylabel("y")
 plt.title("Score: {:.4f}".format(Ridge.score(X_test_scaled, y_test)))
 plt.show()
